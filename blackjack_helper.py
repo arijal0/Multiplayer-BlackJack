@@ -97,13 +97,20 @@ def print_end_turn_status(hand_value):
 #
 # Return:
 #   none
-def print_end_game_status(user_hand, dealer_hand):
-  print_header('GAME RESULT')
+def print_end_game_status(game_score,user_score,dealer_hand,players):
+    print_header("GAME RESULT")
+    for player, player_hand in game_score.items():
+        
+        if player_hand <= 21 and (player_hand > dealer_hand or dealer_hand > 21):
+            user_score[player] += 1
+            print(f"{player} wins! Score: {user_score[player]}")
+        elif player_hand > 21 or (dealer_hand <= 21 and dealer_hand > player_hand):
+            user_score[player] -= 1
+            print(f"{player} loses! Score: {user_score[player]}")
+        else:
+            print(f"{player} pushes. Score: {user_score[player]}")
 
-  if user_hand <= 21 and (user_hand > dealer_hand or dealer_hand > 21):
-    
-    print('You win!')
-  elif user_hand > 21 or (dealer_hand <= 21 and dealer_hand > user_hand):
-    print('Dealer wins!')
-  else:
-    print('Push.')
+        # Eliminate player if their score is 0
+        if user_score[player] == 0:
+            print(f"{player} eliminated!")
+            players.remove(player)
